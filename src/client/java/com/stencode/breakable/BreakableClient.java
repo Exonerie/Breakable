@@ -20,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import org.apache.logging.log4j.Logger;
@@ -97,7 +98,7 @@ public class BreakableClient implements ClientModInitializer {
 
             Item item = itemStack.getItem();
             // Tridents and swords take 2 damage from mining blocks
-            if (item instanceof TridentItem || item instanceof SwordItem) {
+            if (item instanceof TridentItem || itemStack.isIn(ItemTags.SWORDS)) {
                 if (itemStack.getMaxDamage() - itemStack.getDamage() > 2)
                     return ActionResult.PASS;
             } else {
@@ -123,13 +124,13 @@ public class BreakableClient implements ClientModInitializer {
             Item item = itemStack.getItem();
             // Mining tools will take 2 damage when hitting an entity
             // Only mining tools, swords, tridents and maces take damage from hitting entities
-            if (item instanceof MiningToolItem) {
+            if (itemStack.isIn(ItemTags.PICKAXES)) {
                 if (itemStack.getMaxDamage() - itemStack.getDamage() > 2)
                     return ActionResult.PASS;
 
                 notify(player);
                 return ActionResult.FAIL;
-            } else if (item instanceof SwordItem || item instanceof TridentItem || item instanceof MaceItem) {
+            } else if (itemStack.isIn(ItemTags.SWORDS) || item instanceof TridentItem || item instanceof MaceItem) {
                 if (itemStack.getMaxDamage() - itemStack.getDamage() > 1)
                     return ActionResult.PASS;
 
